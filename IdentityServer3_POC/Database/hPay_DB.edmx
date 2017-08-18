@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="hPay_Demo_HSAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="IdentityClient">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Client_Id" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Client_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
+          <Property Name="Flow" Type="int" Nullable="false" />
+          <Property Name="AccessTokenLifetime" Type="int" Nullable="false" />
+          <Property Name="AccessTokenType" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Client_Scope" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IdentityClientSecrets">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Client_Secret" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="2000" />
+          <Property Name="Expiration" Type="datetimeoffset" Precision="7" />
+          <Property Name="Client_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IdentityServerScopes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="DisplayName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Required" Type="bit" Nullable="false" />
+          <Property Name="Client_id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_IdentityClientSecrets_IdentityClient">
+          <End Role="IdentityClient" Type="Self.IdentityClient" Multiplicity="1" />
+          <End Role="IdentityClientSecrets" Type="Self.IdentityClientSecrets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IdentityClient">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IdentityClientSecrets">
+              <PropertyRef Name="Client_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="hPay_Demo_HSAModelStoreContainer">
+          <EntitySet Name="IdentityClient" EntityType="Self.IdentityClient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IdentityClientSecrets" EntityType="Self.IdentityClientSecrets" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IdentityServerScopes" EntityType="Self.IdentityServerScopes" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_IdentityClientSecrets_IdentityClient" Association="Self.FK_IdentityClientSecrets_IdentityClient">
+            <End Role="IdentityClient" EntitySet="IdentityClient" />
+            <End Role="IdentityClientSecrets" EntitySet="IdentityClientSecrets" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="hPay_Demo_HSAModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="hPay_Demo_HSAEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="IdentityClients" EntityType="hPay_Demo_HSAModel.IdentityClient" />
+          <EntitySet Name="IdentityClientSecrets" EntityType="hPay_Demo_HSAModel.IdentityClientSecret" />
+          <AssociationSet Name="FK_IdentityClientSecrets_IdentityClient" Association="hPay_Demo_HSAModel.FK_IdentityClientSecrets_IdentityClient">
+            <End Role="IdentityClient" EntitySet="IdentityClients" />
+            <End Role="IdentityClientSecret" EntitySet="IdentityClientSecrets" />
+          </AssociationSet>
+          <EntitySet Name="IdentityServerScopes" EntityType="hPay_Demo_HSAModel.IdentityServerScope" />
+        </EntityContainer>
+        <EntityType Name="IdentityClient">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Client_Id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Client_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="Flow" Type="Int32" Nullable="false" />
+          <Property Name="AccessTokenLifetime" Type="Int32" Nullable="false" />
+          <Property Name="AccessTokenType" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Client_Scope" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="IdentityClientSecrets" Relationship="hPay_Demo_HSAModel.FK_IdentityClientSecrets_IdentityClient" FromRole="IdentityClient" ToRole="IdentityClientSecret" />
+        </EntityType>
+        <EntityType Name="IdentityClientSecret">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Client_Secret" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="Expiration" Type="DateTimeOffset" Precision="7" />
+          <Property Name="Client_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="IdentityClient" Relationship="hPay_Demo_HSAModel.FK_IdentityClientSecrets_IdentityClient" FromRole="IdentityClientSecret" ToRole="IdentityClient" />
+        </EntityType>
+        <Association Name="FK_IdentityClientSecrets_IdentityClient">
+          <End Type="hPay_Demo_HSAModel.IdentityClient" Role="IdentityClient" Multiplicity="1" />
+          <End Type="hPay_Demo_HSAModel.IdentityClientSecret" Role="IdentityClientSecret" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IdentityClient">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IdentityClientSecret">
+              <PropertyRef Name="Client_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="IdentityServerScope">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Required" Type="Boolean" Nullable="false" />
+          <Property Name="Client_id" Type="Int32" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="hPay_Demo_HSAModelStoreContainer" CdmEntityContainer="hPay_Demo_HSAEntities">
+          <EntitySetMapping Name="IdentityClients">
+            <EntityTypeMapping TypeName="hPay_Demo_HSAModel.IdentityClient">
+              <MappingFragment StoreEntitySet="IdentityClient">
+                <ScalarProperty Name="Client_Scope" ColumnName="Client_Scope" />
+                <ScalarProperty Name="AccessTokenType" ColumnName="AccessTokenType" />
+                <ScalarProperty Name="AccessTokenLifetime" ColumnName="AccessTokenLifetime" />
+                <ScalarProperty Name="Flow" ColumnName="Flow" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Client_Name" ColumnName="Client_Name" />
+                <ScalarProperty Name="Client_Id" ColumnName="Client_Id" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IdentityClientSecrets">
+            <EntityTypeMapping TypeName="hPay_Demo_HSAModel.IdentityClientSecret">
+              <MappingFragment StoreEntitySet="IdentityClientSecrets">
+                <ScalarProperty Name="Client_Id" ColumnName="Client_Id" />
+                <ScalarProperty Name="Expiration" ColumnName="Expiration" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Client_Secret" ColumnName="Client_Secret" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IdentityServerScopes">
+            <EntityTypeMapping TypeName="hPay_Demo_HSAModel.IdentityServerScope">
+              <MappingFragment StoreEntitySet="IdentityServerScopes">
+                <ScalarProperty Name="Client_id" ColumnName="Client_id" />
+                <ScalarProperty Name="Required" ColumnName="Required" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
